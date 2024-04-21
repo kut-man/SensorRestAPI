@@ -21,16 +21,18 @@ public class SensorController {
 
     private final SensorValidator sensorValidator;
     private final SensorService sensorService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public SensorController(SensorValidator sensorValidator, SensorService sensorService) {
+    public SensorController(SensorValidator sensorValidator, SensorService sensorService, ModelMapper modelMapper) {
         this.sensorValidator = sensorValidator;
         this.sensorService = sensorService;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/registration")
     public ResponseEntity<HttpStatus> registerSensor(@RequestBody @Valid SensorDTO sensorDTO, BindingResult bindingResult) {
-        Sensor sensor = convertToSensor(sensorDTO);
+        Sensor sensor = modelMapper.map(sensorDTO, Sensor.class);
         sensorValidator.validate(sensor, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -48,10 +50,5 @@ public class SensorController {
         response.setMessage(e.getMessage());
         response.setTimestamp(System.currentTimeMillis());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
-    }
-
-    private Sensor convertToSensor(SensorDTO sensorDTO) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(sensorDTO, Sensor.class);
     }
 }
