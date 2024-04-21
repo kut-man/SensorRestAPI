@@ -28,4 +28,8 @@ public class MeasurementService {
     public List<Measurement> getMeasurement() {
         return measurementRepository.findAll();
     }
+
+    public long getNumberOfRainyDays() {
+        return measurementRepository.countDaysWithRain();
+    }
 }

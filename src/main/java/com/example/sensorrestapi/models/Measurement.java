@@ -19,7 +19,7 @@ public class Measurement {
     @NotNull
     @Max(value = 100, message = "Measurement value must be less than 100!")
     @Min(value = -100, message = "Measurement value must be more than -100!")
-    private int value;
+    private Double value;
 
     @Column(name = "isRaining")
     @NotNull
@@ -33,17 +33,6 @@ public class Measurement {
     @Temporal(TemporalType.TIMESTAMP)
     private Date takenAt;
 
-    public Measurement(int id, int value, boolean isRaining, Sensor sensor, Date takenAt) {
-        this.id = id;
-        this.value = value;
-        this.isRaining = isRaining;
-        this.sensor = sensor;
-        this.takenAt = takenAt;
-    }
-
-    public Measurement() {
-    }
-
     public int getId() {
         return id;
     }
@@ -52,11 +41,11 @@ public class Measurement {
         this.id = id;
     }
 
-    public int getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 

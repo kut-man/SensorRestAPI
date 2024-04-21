@@ -21,16 +21,7 @@ public class Sensor {
 
     @OneToMany(mappedBy = "sensor")
     private List<Measurement> measurementList;
-
-    public Sensor(int id, String name, List<Measurement> measurementList) {
-        this.id = id;
-        this.name = name;
-        this.measurementList = measurementList;
-    }
-
-    public Sensor() {
-    }
-
+    
     public int getId() {
         return id;
     }

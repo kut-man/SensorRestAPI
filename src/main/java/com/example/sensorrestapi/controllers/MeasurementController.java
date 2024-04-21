@@ -13,7 +13,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/measurements")
@@ -38,6 +40,13 @@ public class MeasurementController {
             measurementDTOList.add(modelMapper.map(measurement, MeasurementDTO.class));
         }
          return measurementDTOList;
+    }
+
+    @GetMapping("/rainyDaysCount")
+    public Map<String, Long> getNumberOfRainyDays() {
+        Map<String, Long> rainyDaysCount = new HashMap<>();
+        rainyDaysCount.put("rainyDaysCount", measurementService.getNumberOfRainyDays());
+        return rainyDaysCount;
     }
 
     @PostMapping("/add")

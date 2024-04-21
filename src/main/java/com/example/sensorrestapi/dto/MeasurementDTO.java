@@ -8,7 +8,7 @@ public class MeasurementDTO {
     @NotNull
     @Max(value = 100, message = "Measurement value must be less than 100!")
     @Min(value = -100, message = "Measurement value must be more than -100!")
-    private int value;
+    private Double value;
 
     @NotNull
     private boolean isRaining;
@@ -16,20 +16,11 @@ public class MeasurementDTO {
     @NotNull
     private SensorDTO sensor;
 
-    public MeasurementDTO(int value, boolean isRaining, SensorDTO sensor) {
-        this.value = value;
-        this.isRaining = isRaining;
-        this.sensor = sensor;
-    }
-
-    public MeasurementDTO() {
-    }
-
-    public int getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 
