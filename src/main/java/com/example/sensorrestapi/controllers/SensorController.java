@@ -3,7 +3,8 @@ package com.example.sensorrestapi.controllers;
 import com.example.sensorrestapi.dto.SensorDTO;
 import com.example.sensorrestapi.models.Sensor;
 import com.example.sensorrestapi.services.SensorService;
-import com.example.sensorrestapi.utils.SensorErrorResponse;
+import com.example.sensorrestapi.utils.ErrorMessageBuilder;
+import com.example.sensorrestapi.utils.ErrorResponse;
 import com.example.sensorrestapi.utils.SensorExistsException;
 import com.example.sensorrestapi.utils.SensorValidator;
 import jakarta.validation.Valid;
@@ -12,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("/sensors")
@@ -35,18 +34,7 @@ public class SensorController {
         sensorValidator.validate(sensor, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            StringBuilder errorMessage = new StringBuilder();
-
-            List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
-
-            for(FieldError error : fieldErrorList) {
-                errorMessage.append(error.getField())
-                        .append(" - ")
-                        .append(error.getDefaultMessage())
-                        .append(";");
-            }
-
-            throw new SensorExistsException(errorMessage.toString());
+            throw new SensorExistsException(ErrorMessageBuilder.buildErrorMessage(bindingResult));
         }
 
         sensorService.saveSensor(sensor);
@@ -55,8 +43,8 @@ public class SensorController {
     }
 
     @ExceptionHandler
-    private ResponseEntity<SensorErrorResponse> handleException(SensorExistsException e) {
-        SensorErrorResponse response = new SensorErrorResponse();
+    private ResponseEntity<ErrorResponse> handleException(SensorExistsException e) {
+        ErrorResponse response = new ErrorResponse();
         response.setMessage(e.getMessage());
         response.setTimestamp(System.currentTimeMillis());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);

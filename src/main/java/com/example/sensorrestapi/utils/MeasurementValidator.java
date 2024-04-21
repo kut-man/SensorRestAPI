@@ -1,6 +1,6 @@
 package com.example.sensorrestapi.utils;
 
-import com.example.sensorrestapi.models.Sensor;
+import com.example.sensorrestapi.models.Measurement;
 import com.example.sensorrestapi.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,25 +8,25 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class SensorValidator implements Validator {
+public class MeasurementValidator implements Validator {
 
     private final SensorService sensorService;
 
     @Autowired
-    public SensorValidator(SensorService sensorService) {
+    public MeasurementValidator(SensorService sensorService) {
         this.sensorService = sensorService;
     }
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return Sensor.class.equals(clazz);
+        return Measurement.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        Sensor sensor = (Sensor) target;
-        if (sensorService.findSensor(sensor.getName()).isPresent()) {
-            errors.rejectValue("name", "409", "Sensor name is taken!");
+        Measurement measurement = (Measurement) target;
+        if (sensorService.findSensor(measurement.getSensor().getName()).isEmpty()) {
+            errors.rejectValue("sensor", "409", "Sensor name is invalid!");
         }
     }
 }

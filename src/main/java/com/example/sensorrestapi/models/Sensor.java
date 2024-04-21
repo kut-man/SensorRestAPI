@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Sensor")
 public class Sensor {
@@ -16,6 +18,18 @@ public class Sensor {
     @NotEmpty
     @Size(min = 3, max = 30, message = "Sensor name should be between 3 and 30 characters!")
     private String name;
+
+    @OneToMany(mappedBy = "sensor")
+    private List<Measurement> measurementList;
+
+    public Sensor(int id, String name, List<Measurement> measurementList) {
+        this.id = id;
+        this.name = name;
+        this.measurementList = measurementList;
+    }
+
+    public Sensor() {
+    }
 
     public int getId() {
         return id;
@@ -31,5 +45,13 @@ public class Sensor {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Measurement> getMeasurementList() {
+        return measurementList;
+    }
+
+    public void setMeasurementList(List<Measurement> measurementList) {
+        this.measurementList = measurementList;
     }
 }
